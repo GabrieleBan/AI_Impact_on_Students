@@ -15,17 +15,25 @@ e uno per l'analisi e visualizzazione dei dati
 nel pomeriggio:
 (14:30) fase di studio dei dati dal punto di vista della statisticca
 
+Gabriele:
+
 flusso di osservazioni:
-    - chi studia poco non ha un incremento della gpa, va anche in negativo
+    - chi studia poco (in entrambe le modalità) non ha un incremento della gpa, va anche in negativo
     - chi studia poco o mediamente(tradizionale) e al contempo usa tanta ia ha poco incremento o va in negativo
     miglioramento maggiore se invece di usare ia su incrementano le ore di studio tradizionale
     - tante ore tradizionali e un uso medio di ai migliora un po'
     - tante ore tradizionali ma usa tanta ai, il vantaggio diminuisce
 
-gpa aumenta con lo studio tradizionale 
-l'aumento delle ore dell'uso della ai non è tanto efficiente quanto l'aumento delle ore di studi tradizionale
+gpa aumenta con lo studio tradizionale (corr 0.34)
+l'aumento delle ore dell'uso della ai non è tanto efficiente quanto l'aumento delle ore di studi tradizionale,specialmente a quantità di ore superiori a 10
+troppe ore di IA  possono anche risultare in decrementi (più di 30 ore mostrano una quantità significativa di studenti con un decremento maggiore 
+rispetto a chi studia di meno)
 
 chi usa tanta ia è abbastanza onesto sul dire quanto è dipendente dal suo uso
+chi usa tanta ia tende ad avere meno retenzione delle skill
+
+
+Anna:
 
 il legame tra burnout e l'uso dell'intelligenza artificiale-studio tradizionale:
 
@@ -49,11 +57,6 @@ il legame tra burnout e l'uso dell'intelligenza artificiale-studio tradizionale:
     barriera oraria di utilizzo dell'IA. Gli studenti che dedicano la propria settimana allo studio duro sui libri non hanno 
     materialmente il tempo residuo per abusare della GenAI, e questo indirettamente preserva la maggior parte di loro dal 
     burnout alto
-
-
-
-
-
 
 
 
