@@ -1,0 +1,12 @@
+componenti del gruppo: Gabriele Anna Manuel Adriano
+
+(10-11) 
+Nella mattinata di oggi il team si è concentrato sulla selezione e 
+sull'analisi preliminare del dataset principale. I dati individuati raccolgono
+informazioni chiave relative alle prestazioni accademiche degli studenti, 
+mettendole in relazione con le modalità e le tempistiche di utilizzo degli strumenti 
+di Intelligenza Artificiale.
+
+analisi preliminare dei dati (11:10)
+divisione in due gruppi uno per prima impostazione del modello
+e uno per l'analisi e visualizzazione dei dati 
