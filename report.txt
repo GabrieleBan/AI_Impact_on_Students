@@ -59,28 +59,26 @@ il legame tra burnout e l'uso dell'intelligenza artificiale-studio tradizionale:
     burnout alto
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> d57c776d6dc26e650357903791af1b6877930e9e
 manuel: 
 
-nelle scuole con regole più rigide sull’IA gli studenti sono in media più ansiosi rispetto a quelle più permissive.
-seconda ipotesi : chi usa più spesso l’IA tende ad avere più ansia rispetto a chi la usa poco.
-terza potesi: l’ansia è molto alta soprattutto tra chi usa tanto l’IA e sta in scuole con divieto. Quindi sembra che il problema non sia l’IA in sé, ma quanto ci si abitua a usarla.
-Per i voti invece le differenze sono piccole, però chi ha più ansia tende ad andare leggermente peggio.
+    nelle scuole con regole più rigide sull’IA gli studenti sono in media più ansiosi rispetto a quelle più permissive.
+    seconda ipotesi : chi usa più spesso l’IA tende ad avere più ansia rispetto a chi la usa poco.
+    terza potesi: l’ansia è molto alta soprattutto tra chi usa tanto l’IA e sta in scuole con divieto. Quindi sembra che il problema non sia l’IA in sé, ma quanto ci si abitua a usarla.
+    Per i voti invece le differenze sono piccole, però chi ha più ansia tende ad andare leggermente peggio.
 
 
 adriano: 
-I dati mostrano un legame psicologico fortissimo tra l'uso passivo dell'IA e il panico da esame.
-Gli studenti meno esperti usano l'IA come una "stampella" durante il semestre. Questo li fa sentire coperti,
-ma non permette loro di memorizzare davvero le materie. Il risultato è che il giorno dell'esame, quando si 
-trovano da soli davanti al professore o al foglio bianco senza il computer, vengono travolti da livelli di 
-ansia e stress altissimi perché si rendono conto di non sapere nulla.
-Al contrario, chi ha imparato a usare bene l'IA la sfrutta per allenarsi duramente. Arriva all'esame 
-sicuro della propria preparazione e, di conseguenza, affronta la prova con totale serenità e pochissima ansia.
-Saper controllare la tecnologia protegge anche la salute mentale dello studente. I dati indicano che chi passa
-ore sull'IA senza saperla padroneggiare accumula frustrazione, confusione e va incontro a un forte rischio di
-burnout (esaurimento nervoso). Chi invece ha competenze avanzate riesce ad automatizzare le parti noiose
-dello studio, gestisce meglio il tempo e vive l'università in modo molto più rilassato.
-L'Intelligenza Artificiale allarga i divari. Se non la sai usare, ti rende dipendente, 
-ti mette ansia e rovina i tuoi voti. Se impari a usarla come un alleato, ti semplifica la vita, azzera
-lo stress e ti fa prendere voti più alti. Per questo motivo, la conclusione strategica è che le università
-non dovrebbero vietare questi strumenti, ma insegnare a tutti gli studenti come usarli correttamente.
+    I dati mostrano un legame psicologico fortissimo tra l'uso passivo dell'IA e il panico da esame.
+    Gli studenti meno esperti usano l'IA come una "stampella" durante il semestre. Questo li fa sentire coperti,
+    ma non permette loro di memorizzare davvero le materie. 
+
+    Il risultato è che il giorno dell'esame, quando si 
+    trovano da soli davanti al professore o al foglio bianco senza il computer, vengono travolti da livelli di 
+    ansia e stress altissimi perché si rendono conto di non sapere nulla.
+    Al contrario, chi ha imparato a usare bene l'IA la sfrutta per allenarsi duramente. Arriva all'esame 
+    sicuro della propria preparazione e, di conseguenza, affronta la prova con totale serenità e pochissima ansia.
+        - CHI USA TANTA IA POI SI TROVA MAGGIORMENTE IN DIFFICOLTA' ALL'ESAME 
