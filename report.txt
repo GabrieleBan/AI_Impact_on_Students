@@ -15,7 +15,6 @@ e uno per l'analisi e visualizzazione dei dati
 nel pomeriggio:
 (14:30) fase di studio dei dati dal punto di vista della statisticca
 
-Gabriele:
 
 Gabriele:
 
@@ -57,10 +56,6 @@ Anna:
     burnout alto
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> d57c776d6dc26e650357903791af1b6877930e9e
 manuel: 
 
     nelle scuole con regole più rigide sull’IA gli studenti sono in media più ansiosi rispetto a quelle più permissive.
@@ -80,28 +75,54 @@ Adriano:
     ansia e stress altissimi perché si rendono conto di non sapere nulla.
     Al contrario, chi ha imparato a usare bene l'IA la sfrutta per allenarsi duramente. Arriva all'esame 
     sicuro della propria preparazione e, di conseguenza, affronta la prova con totale serenità e pochissima ansia.
-        - CHI USA TANTA IA POI SI TROVA MAGGIORMENTE IN DIFFICOLTA' ALL'ESAME 
+        CHI USA TANTA IA POI SI TROVA MAGGIORMENTE IN DIFFICOLTA' ALL'ESAME 
 
------------
-mattina 04.06.26
+--------------------------------------------------
+04.06.26
 
 Adriano:
-    - studio e approfondimento sul funzionamento di random forest e xgboost 
+    - studio e approfondimento sul funzionamento di random forest e xgboost con accento sulla loro differenza
+    - lavoro sui codici dei grafici per migliorarne la chiarezza e la facilità di lettura
+    - impostazione delle slide 
+
 Anna:
+    - feedback ad Adriano sulle basi del ML
     - ulteriore analisi dei dati per capire le relazioni delle colonne e valutare quale coding attuare (label, one hot coding, target coding)
-    - valutazione generale sulla possibilità di fare feature engeneering (... da approfondire dopo l'addestramento del modello)
+    - valutazione generale sulla possibilità di fare feature engineering (... da approfondire dopo l'addestramento del modello)
     - preparazione del dataset e gestione delle colonne str   
     - ricerca dei migliori iperparametri usando GridSearchCV su random forest
+    - ricerca dei migliori iperparametri usando GridSearchCV su xgboost
 
-    - preparazione per : ricerca dei migliori iperparametri usando GridSearchCV su xgboost
+    - addestramento di entrambi i modelli con il training per valutare le prestazioni (molto simili) 
+        BISOGNA AGIRE SULLE FEATURES PER AIUTARE IL MODELLO
+    - valutazione della correlazione features-y_train , uso della PCA per valutare l'opzione di pulire il dataset da colonne inutili per non introdurre 
+    rumore al modello. Con la PCA emerge un miglioramento della recall di tutte e tre le classi, ciò ci suggerisce che ci sono colonne che non aiutano.
+    Dopo un primo run del solo random forest è emerso un miglioramento delle recall. 
+
+    - studio di possibili combinazioni (con analisi graficata) delle colonne per effettuare feature engineering
+     
+     (FUTURO)---> da valutare rapporto tra ore di studio tradizionale e ore di uso dell' ai
 
 
 Gabriele:
+    - feedback ad Adriano su miglioramento tabelle
+    - feedback e supporto a manuel nella stesura del modello
+    - addestramento modello specifico per major con XGBoost + optuna
+    - visualizzazione errore post gpa predetto vs reale    
 
 
-    ...
+Manuel + Gabriele: 
 
-Manuel: 
+    - In questa parte del progetto abbiamo provato ad addestrare un unico modello XGBoost utilizzando tutto il dataset, 
+    senza dividere gli studenti in base alla categoria di laurea. Per trovare la configurazione migliore del modello abbiamo usato Optuna, 
+    che prova automaticamente diverse combinazioni di parametri e sceglie quella che ottiene l'errore più basso.
 
-    ...
+    - Una volta trovati i parametri migliori, abbiamo addestrato il modello finale e ottenuto un MAE di circa 0.111, 
+    cioè l'errore medio tra il valore reale e quello previsto dal modello.
+
+    - Come passaggio successivo verrà realizzato uno scatterplot degli errori, per vedere in modo più intuitivo come sono 
+    distribuite le differenze tra valori reali e valori predetti.
+
+    - Infine, sarà fatto anche un confronto con l'approccio precedente, in cui era stato addestrato un modello diverso per ogni categoria
+    di laurea, per capire quale delle due soluzioni offre le prestazioni migliori.
 
