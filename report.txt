@@ -17,6 +17,8 @@ nel pomeriggio:
 
 Gabriele:
 
+Gabriele:
+
     - chi studia poco non ha un incremento della gpa, va anche in negativo
     - chi studia poco o mediamente(tradizionale) e al contempo usa tanta ia ha poco incremento o va in negativo
     miglioramento maggiore se invece di usare ia su incrementano le ore di studio tradizionale
@@ -54,7 +56,12 @@ Anna:
     materialmente il tempo residuo per abusare della GenAI, e questo indirettamente preserva la maggior parte di loro dal 
     burnout alto
 
-Manuel: 
+
+<<<<<<< HEAD
+
+=======
+>>>>>>> d57c776d6dc26e650357903791af1b6877930e9e
+manuel: 
 
     nelle scuole con regole più rigide sull’IA gli studenti sono in media più ansiosi rispetto a quelle più permissive.
     seconda ipotesi : chi usa più spesso l’IA tende ad avere più ansia rispetto a chi la usa poco.
