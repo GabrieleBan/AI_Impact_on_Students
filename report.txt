@@ -126,3 +126,7 @@ Manuel + Gabriele:
     - Infine, sarà fatto anche un confronto con l'approccio precedente, in cui era stato addestrato un modello diverso per ogni categoria
     di laurea, per capire quale delle due soluzioni offre le prestazioni migliori.
 
+
+
+    aaaaaaaah
+
