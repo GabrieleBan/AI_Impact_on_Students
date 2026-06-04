@@ -15,19 +15,23 @@ e uno per l'analisi e visualizzazione dei dati
 nel pomeriggio:
 (14:30) fase di studio dei dati dal punto di vista della statisticca
 
-flusso di osservazioni:
+Gabriele:
+
     - chi studia poco non ha un incremento della gpa, va anche in negativo
     - chi studia poco o mediamente(tradizionale) e al contempo usa tanta ia ha poco incremento o va in negativo
     miglioramento maggiore se invece di usare ia su incrementano le ore di studio tradizionale
     - tante ore tradizionali e un uso medio di ai migliora un po'
     - tante ore tradizionali ma usa tanta ai, il vantaggio diminuisce
 
-gpa aumenta con lo studio tradizionale 
-l'aumento delle ore dell'uso della ai non è tanto efficiente quanto l'aumento delle ore di studi tradizionale
+GPA AUMENTA CON LO STUDIO TRADIZIONALE
 
-chi usa tanta ia è abbastanza onesto sul dire quanto è dipendente dal suo uso
+L'AUMENTO DELLE ORE DELL'USO DELLA AI NON È TANTO EFFICIENTE QUANTO L'AUMENTO DELLE ORE DI STUDIO TRADIZIONALE
 
-il legame tra burnout e l'uso dell'intelligenza artificiale-studio tradizionale:
+CHI USA TANTA IA È ABBASTANZA ONESTO SUL DIRE QUANTO È DIPENDENTE DAL SUO USO
+
+Anna:
+
+    il legame tra burnout e l'uso dell'intelligenza artificiale-studio tradizionale:
 
     - Distribuzione della Variazione GPA (Delta) per Livello di Burnout, 
     con violin plot quasi identici per i tre livelli di burnout emerge i livelli di burnout non modificano la distribuzione del gpa 
@@ -50,16 +54,16 @@ il legame tra burnout e l'uso dell'intelligenza artificiale-studio tradizionale:
     materialmente il tempo residuo per abusare della GenAI, e questo indirettamente preserva la maggior parte di loro dal 
     burnout alto
 
-
-manuel: 
+Manuel: 
 
     nelle scuole con regole più rigide sull’IA gli studenti sono in media più ansiosi rispetto a quelle più permissive.
     seconda ipotesi : chi usa più spesso l’IA tende ad avere più ansia rispetto a chi la usa poco.
-    terza potesi: l’ansia è molto alta soprattutto tra chi usa tanto l’IA e sta in scuole con divieto. Quindi sembra che il problema non sia l’IA in sé, ma quanto ci si abitua a usarla.
+    terza potesi: l’ansia è molto alta soprattutto tra chi usa tanto l’IA e sta in scuole con divieto. 
+    Quindi sembra che il problema non sia l’IA in sé, ma quanto ci si abitua a usarla.
     Per i voti invece le differenze sono piccole, però chi ha più ansia tende ad andare leggermente peggio.
 
+Adriano: 
 
-adriano: 
     I dati mostrano un legame psicologico fortissimo tra l'uso passivo dell'IA e il panico da esame.
     Gli studenti meno esperti usano l'IA come una "stampella" durante il semestre. Questo li fa sentire coperti,
     ma non permette loro di memorizzare davvero le materie. 
@@ -70,3 +74,26 @@ adriano:
     Al contrario, chi ha imparato a usare bene l'IA la sfrutta per allenarsi duramente. Arriva all'esame 
     sicuro della propria preparazione e, di conseguenza, affronta la prova con totale serenità e pochissima ansia.
         - CHI USA TANTA IA POI SI TROVA MAGGIORMENTE IN DIFFICOLTA' ALL'ESAME 
+
+-----------
+mattina 04.06.26
+
+Adriano:
+    - studio e approfondimento sul funzionamento di random forest e xgboost 
+Anna:
+    - ulteriore analisi dei dati per capire le relazioni delle colonne e valutare quale coding attuare (label, one hot coding, target coding)
+    - valutazione generale sulla possibilità di fare feature engeneering (... da approfondire dopo l'addestramento del modello)
+    - preparazione del dataset e gestione delle colonne str   
+    - ricerca dei migliori iperparametri usando GridSearchCV su random forest
+
+    - preparazione per : ricerca dei migliori iperparametri usando GridSearchCV su xgboost
+
+
+Gabriele:
+
+    ...
+
+Manuel: 
+
+    ...
+
