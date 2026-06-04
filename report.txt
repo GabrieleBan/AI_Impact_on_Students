@@ -57,10 +57,6 @@ Anna:
     burnout alto
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> d57c776d6dc26e650357903791af1b6877930e9e
 manuel: 
 
     nelle scuole con regole più rigide sull’IA gli studenti sono in media più ansiosi rispetto a quelle più permissive.
@@ -97,9 +93,11 @@ Anna:
 
 
 Gabriele:
-
-
-    ...
+    - analisi dataset: abbiamo considerato varie soluzioni per trattare i dati categorici:
+        . nel caso di presenza di ordinamento logico sono stati convertiti in int
+        . altrimenti stiamo valutando divisione in colonne diverse o di sostituire con valori aggregati sulla predizione
+        . per la categoria di studi  stiamo esplorando sia il mantenere l'informazione nello stesso dataset sia di creare un modello diverso per categoria
+    - scelta modelli e pipeline iniziata
 
 Manuel: 
 
