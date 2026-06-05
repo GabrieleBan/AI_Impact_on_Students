@@ -1,0 +1,135 @@
+componenti del gruppo: Gabriele Anna Manuel Adriano
+
+(10-11) 
+Nella mattinata di oggi il team si è concentrato sulla selezione e 
+sull'analisi preliminare del dataset principale. I dati individuati raccolgono
+informazioni chiave relative alle prestazioni accademiche degli studenti, 
+mettendole in relazione con le modalità e le tempistiche di utilizzo degli strumenti 
+di Intelligenza Artificiale.
+
+analisi preliminare dei dati (11:10)
+divisione in due gruppi uno per prima impostazione del modello
+e uno per l'analisi e visualizzazione dei dati 
+
+
+nel pomeriggio:
+(14:30) fase di studio dei dati dal punto di vista della statisticca
+
+
+Gabriele:
+
+    - chi studia poco non ha un incremento della gpa, va anche in negativo
+    - chi studia poco o mediamente(tradizionale) e al contempo usa tanta ia ha poco incremento o va in negativo
+    miglioramento maggiore se invece di usare ia su incrementano le ore di studio tradizionale
+    - tante ore tradizionali e un uso medio di ai migliora un po'
+    - tante ore tradizionali ma usa tanta ai, il vantaggio diminuisce
+
+GPA AUMENTA CON LO STUDIO TRADIZIONALE
+
+L'AUMENTO DELLE ORE DELL'USO DELLA AI NON È TANTO EFFICIENTE QUANTO L'AUMENTO DELLE ORE DI STUDIO TRADIZIONALE
+
+CHI USA TANTA IA È ABBASTANZA ONESTO SUL DIRE QUANTO È DIPENDENTE DAL SUO USO
+
+Anna:
+
+    il legame tra burnout e l'uso dell'intelligenza artificiale-studio tradizionale:
+
+    - Distribuzione della Variazione GPA (Delta) per Livello di Burnout, 
+    con violin plot quasi identici per i tre livelli di burnout emerge i livelli di burnout non modificano la distribuzione del gpa 
+
+    - Gli studenti che soffrono di un alto rischio di burnout passano mediamente il triplo del tempo sulla GenAI 
+    rispetto a chi ha un rischio basso.
+
+    - Esistono delle eccezioni interessanti. Ci sono studenti che usano l'IA moltissimo (fino a 25-30 ore a settimana) ma dichiarano 
+    comunque un rischio di burnout Basso o Medio.
+    
+    - sono stati fatti grafici per ciascun tipo di utilizzo della ai, ma gli andamenti restano analoghi facendo intendere 
+    che il burnout dipende dalle ore di uso della ai e non tanto dal tipo di utilizzo 
+
+    - Chi passa poche ore settimanali a usare l'AI indipendentemente dal numero di ore di studio tradizionale 
+    manifesta bassi livelli di burnout. Chi riscontra livelli medi di burnout non ha un andamento definito di ore di 
+    studio tradizionali e uso della AI. Sotto le 15 ore: Domina il verde (Low burnout), intervallato dall'arancione. 
+    I punti rossi (High burnout) sono rarissimi. Sopra le 15 ore: Il verde sparisce quasi del tutto. La nuvola diventa un monopolio 
+    di punti arancioni e, soprattutto, rossi. Il fattore scatenante del burnout alto è quasi esclusivamente il superamento di questa 
+    barriera oraria di utilizzo dell'IA. Gli studenti che dedicano la propria settimana allo studio duro sui libri non hanno 
+    materialmente il tempo residuo per abusare della GenAI, e questo indirettamente preserva la maggior parte di loro dal 
+    burnout alto
+
+
+manuel: 
+
+    nelle scuole con regole più rigide sull’IA gli studenti sono in media più ansiosi rispetto a quelle più permissive.
+    seconda ipotesi : chi usa più spesso l’IA tende ad avere più ansia rispetto a chi la usa poco.
+    terza potesi: l’ansia è molto alta soprattutto tra chi usa tanto l’IA e sta in scuole con divieto. 
+    Quindi sembra che il problema non sia l’IA in sé, ma quanto ci si abitua a usarla.
+    Per i voti invece le differenze sono piccole, però chi ha più ansia tende ad andare leggermente peggio.
+
+Adriano: 
+
+    I dati mostrano un legame psicologico fortissimo tra l'uso passivo dell'IA e il panico da esame.
+    Gli studenti meno esperti usano l'IA come una "stampella" durante il semestre. Questo li fa sentire coperti,
+    ma non permette loro di memorizzare davvero le materie. 
+
+    Il risultato è che il giorno dell'esame, quando si 
+    trovano da soli davanti al professore o al foglio bianco senza il computer, vengono travolti da livelli di 
+    ansia e stress altissimi perché si rendono conto di non sapere nulla.
+    Al contrario, chi ha imparato a usare bene l'IA la sfrutta per allenarsi duramente. Arriva all'esame 
+    sicuro della propria preparazione e, di conseguenza, affronta la prova con totale serenità e pochissima ansia.
+        CHI USA TANTA IA POI SI TROVA MAGGIORMENTE IN DIFFICOLTA' ALL'ESAME 
+
+--------------------------------------------------
+04.06.26
+
+Adriano:
+    - studio e approfondimento sul funzionamento di random forest e xgboost con accento sulla loro differenza
+    - lavoro sui codici dei grafici per migliorarne la chiarezza e la facilità di lettura
+    - impostazione delle slide 
+
+Anna:
+    - feedback ad Adriano sulle basi del ML
+    - ulteriore analisi dei dati per capire le relazioni delle colonne e valutare quale coding attuare (label, one hot coding, target coding)
+    - valutazione generale sulla possibilità di fare feature engineering (... da approfondire dopo l'addestramento del modello)
+    - preparazione del dataset e gestione delle colonne str   
+    - ricerca dei migliori iperparametri usando GridSearchCV su random forest
+    - ricerca dei migliori iperparametri usando GridSearchCV su xgboost
+
+    - addestramento di entrambi i modelli con il training per valutare le prestazioni (molto simili) 
+        BISOGNA AGIRE SULLE FEATURES PER AIUTARE IL MODELLO
+    - valutazione della correlazione features-y_train , uso della PCA per valutare l'opzione di pulire il dataset da colonne inutili per non introdurre 
+    rumore al modello. Con la PCA emerge un miglioramento della recall di tutte e tre le classi, ciò ci suggerisce che ci sono colonne che non aiutano.
+    Dopo un primo run del solo random forest è emerso un miglioramento delle recall. 
+
+    - studio di possibili combinazioni (con analisi graficata) delle colonne per effettuare feature engineering
+     
+     (FUTURO)---> da valutare rapporto tra ore di studio tradizionale e ore di uso dell' ai
+
+
+Gabriele:
+
+    - feedback ad Adriano su miglioramento tabelle
+    - feedback e supporto a manuel nella stesura del modello
+    - addestramento modello specifico per major con XGBoost + optuna
+    - visualizzazione errore post gpa predetto vs reale    
+
+
+Manuel + Gabriele: 
+
+    - analisi dataset: abbiamo considerato varie soluzioni per trattare i dati categorici:
+        . nel caso di presenza di ordinamento logico sono stati convertiti in int
+        . altrimenti stiamo valutando divisione in colonne diverse o di sostituire con valori aggregati sulla predizione
+        . per la categoria di studi  stiamo esplorando sia il mantenere l'informazione nello stesso dataset sia di creare un modello diverso per categoria
+    - scelta modelli e pipeline iniziata
+
+    - In questa parte del progetto abbiamo provato ad addestrare un unico modello XGBoost utilizzando tutto il dataset, 
+    senza dividere gli studenti in base alla categoria di laurea. Per trovare la configurazione migliore del modello abbiamo usato Optuna, 
+    che prova automaticamente diverse combinazioni di parametri e sceglie quella che ottiene l'errore più basso.
+
+    - Una volta trovati i parametri migliori, abbiamo addestrato il modello finale e ottenuto un MAE di circa 0.111, 
+    cioè l'errore medio tra il valore reale e quello previsto dal modello.
+
+    - Come passaggio successivo verrà realizzato uno scatterplot degli errori, per vedere in modo più intuitivo come sono 
+    distribuite le differenze tra valori reali e valori predetti.
+
+    - Infine, sarà fatto anche un confronto con l'approccio precedente, in cui era stato addestrato un modello diverso per ogni categoria
+    di laurea, per capire quale delle due soluzioni offre le prestazioni migliori.
+
