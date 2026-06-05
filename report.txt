@@ -138,3 +138,6 @@ Manuel + Gabriele:
 
     Anna: 
         creazione di nuove feature con il metodo di feature engineering 
+
+    Manuel: 
+        Prove di creare nuove feature ma i risultati sono stati misti
