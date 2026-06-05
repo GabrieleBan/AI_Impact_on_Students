@@ -132,3 +132,6 @@ Manuel + Gabriele:
     Gabriele:
         Git - project recovering: recovering overwritten parts + merge conflicts
         Post-semester gpa Model: visualizzazione dei modelli divisi per major e di quello globale
+        Presentazione: feedback su slide
+        ragionamento con Anna su feature engineering da tentare
+        tentativi di feature engineering
