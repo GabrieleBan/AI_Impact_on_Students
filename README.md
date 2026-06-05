@@ -1,10 +1,10 @@
 # FinalPythonProject
 
 Team:   
-    - Gabriele Banchio: https://www.linkedin.com/in/gabriele-banchio-6842113b5/
-    - Anna Kotelevych https://www.linkedin.com/in/anna-kotelevych-2089b02b1/
-    - Manuel Luis Cortes: https://www.linkedin.com/in/manuel-luis-cortes-7318b236a/
-    - Adriano Brancatello https://www.linkedin.com/in/adriano-brancatello/
+    . Gabriele Banchio: https://www.linkedin.com/in/gabriele-banchio-6842113b5/
+    . Anna Kotelevych https://www.linkedin.com/in/anna-kotelevych-2089b02b1/
+    . Manuel Luis Cortes: https://www.linkedin.com/in/manuel-luis-cortes-7318b236a/
+    . Adriano Brancatello https://www.linkedin.com/in/adriano-brancatello/
 
 Riassunto:
 
