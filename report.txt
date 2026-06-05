@@ -128,5 +128,7 @@ Manuel + Gabriele:
 
 
 
-    aaaaaaaah
-
+04.06.26 mattina:
+    Gabriele:
+        Git - project recovering: recovering overwritten parts + merge conflicts
+        Post-semester gpa Model: visualizzazione dei modelli divisi per major e di quello globale
