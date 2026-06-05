@@ -13,6 +13,5 @@ Durante il lavoro di analisi del dataset abbiamo inseguito 2 obiettivi in parall
     
 - abbiamo studiato linfluenza della IA sullo stato di burnout e stress accademico, con attenzione a come l'uso delle piattaforme di LLM influenza l'approccio al mondo accademico influenzando prestazioni e salute mentale
 
-In seguito abbiamo cercato di fare leva sulle informazioni per migliorare le prestazioni dei modelli addestrati. I modelli addestrati 
-
-
+In seguito abbiamo cercato di fare leva sulle informazioni per migliorare le prestazioni dei modelli addestrati. 
+I modelli addestrati predicono il GPA degli studenti e il rischio di burnout degli studenti.
