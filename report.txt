@@ -135,3 +135,9 @@ Manuel + Gabriele:
         Presentazione: feedback su slide
         ragionamento con Anna su feature engineering da tentare
         tentativi di feature engineering
+
+    Anna: 
+        creazione di nuove feature con il metodo di feature engineering 
+
+    Manuel: 
+        Prove di creare nuove feature ma i risultati sono stati misti
