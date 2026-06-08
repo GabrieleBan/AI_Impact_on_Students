@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-from app_utils.user_input_processing import process_user_data_for_gpa_model
+from app_utils.user_input_processing import process_user_data_for_burnout_model, process_user_data_for_gpa_model
 import lightgbm 
 # Configurazione pagina
 st.set_page_config(page_title="AI & Student Performance Analytics", layout="wide")
@@ -67,12 +67,12 @@ features_comuni = process_user_data_for_gpa_model(major, year, pre_gpa, policy, 
 
 
 
-dati_finali = pd.DataFrame([features_comuni])
+gpa_data = pd.DataFrame([features_comuni])
 
 # Convertiamo in tipo categorico standard le due colonne rimaste testuali per evitare vecchi errori di formato
 from from_categorical_to_value import get_year_of_study_map,get_prompt_level_map
-dati_finali['Year_of_Study'] = dati_finali['Year_of_Study'].map(get_year_of_study_map())
-dati_finali['Prompt_Engineering_Skill'] = dati_finali['Prompt_Engineering_Skill'].map(get_prompt_level_map())
+gpa_data['Year_of_Study'] = gpa_data['Year_of_Study'].map(get_year_of_study_map())
+gpa_data['Prompt_Engineering_Skill'] = gpa_data['Prompt_Engineering_Skill'].map(get_prompt_level_map())
 
 
 # Checkbox di Debug per l'interfaccia di Streamlit
@@ -90,15 +90,45 @@ if st.button("🚀 Calcola Predizioni", type="primary", use_container_width=True
     res_col1, res_col2 = st.columns(2)
     
     # PREDIZIONE GPA 
+    
     with res_col1:
         st.markdown("#### 🎯 Performance Accademica")
         if model_gpa is not None:
-            pred_gpa = model_gpa.predict(dati_finali)[0] 
+            pred_gpa = model_gpa.predict(gpa_data)[0] 
             st.metric(label="Post_Semester_GPA Predetto", value=f"{pred_gpa:.3f}")
         else:
             st.warning("⚠️ File 'gpa_model.pkl' non trovato. Mostro simulazione:")
-            simulated_gpa = max(0.0, min(4.0, pre_gpa - (weekly_ai_hours * 0.01) + (study_hours * 0.02)))
-            st.metric(label="Post_Semester_GPA (Simulato)", value=f"{simulated_gpa:.3f}")
+            pred_gpa = max(0.0, min(4.0, pre_gpa - (weekly_ai_hours * 0.01) + (study_hours * 0.02)))
+            st.metric(label="Post_Semester_GPA (Simulato)", value=f"{pred_gpa:.3f}")
+
+    burnout_data=process_user_data_for_burnout_model(major, year, pre_gpa, policy, study_hours, weekly_ai_hours, use_case, paid_sub, anxiety, ai_dep, prompt_skill, tool_div)
+    burnout_data=pd.DataFrame([burnout_data])
+    burnout_data["Post_Semester_GPA"]=float(pred_gpa)
+    burnout_data['Year_of_Study'] = burnout_data['Year_of_Study'].map(get_year_of_study_map())
+    with res_col2:
+        st.markdown("#### 🧠 Benessere dello Studente")
+        if model_burnout is not None:
+            # Passiamo lo stesso DataFrame a 22 colonne a LightGBM/VotingClassifier
+      
+            pred_burnout = model_burnout.predict(burnout_data)[0]
+            
+            # Colora l'output in base al risultato del modello reale
+            if str(pred_burnout).lower() == "high":
+                st.error(f"🔥 Livello Rischio Burnout: {pred_burnout}")
+            elif str(pred_burnout).lower() == "medium":
+                st.warning(f"⚠️ Livello Rischio Burnout: {pred_burnout}")
+            else:
+                st.success(f"✅ Livello Rischio Burnout: {pred_burnout}")
+        else:
+            st.warning("⚠️ File 'burnout_model.pkl' non trovato. Mostro simulazione:")
+            rischio = "High" if (weekly_ai_hours > 20 and anxiety > 7) else "Medium" if anxiety > 4 else "Low"
+            
+            if rischio == "High":
+                st.error(f"🔥 Livello Rischio Burnout (Simulato): {rischio}")
+            elif rischio == "Medium":
+                st.warning(f"⚠️ Livello Rischio Burnout (Simulato): {rischio}")
+            else:
+                st.success(f"✅ Livello Rischio Burnout (Simulato): {rischio}")
 
     # PREDIZIONE BURNOUT --- WIP
     # with res_col2:
