@@ -141,3 +141,18 @@ Manuel + Gabriele:
 
     Manuel: 
         Prove di creare nuove feature ma i risultati sono stati misti
+
+
+08.06.26
+
+    Manuel:
+        lavoro sulle slide e sull'introduzione
+        
+    Anna:
+        miglioramento del modello di burnout
+
+    Gabriele:
+        miglioramento del modello di riconoscimento del GPA
+
+    Adriano:
+        interfaccia con l'utente
