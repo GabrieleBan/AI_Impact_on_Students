@@ -105,6 +105,7 @@ Anna:
 
 
 Gabriele:
+
     - feedback ad Adriano su miglioramento tabelle
     - feedback e supporto a manuel nella stesura del modello
     - addestramento modello specifico per major con XGBoost + optuna
@@ -112,6 +113,12 @@ Gabriele:
 
 
 Manuel + Gabriele: 
+
+    - analisi dataset: abbiamo considerato varie soluzioni per trattare i dati categorici:
+        . nel caso di presenza di ordinamento logico sono stati convertiti in int
+        . altrimenti stiamo valutando divisione in colonne diverse o di sostituire con valori aggregati sulla predizione
+        . per la categoria di studi  stiamo esplorando sia il mantenere l'informazione nello stesso dataset sia di creare un modello diverso per categoria
+    - scelta modelli e pipeline iniziata
 
     - In questa parte del progetto abbiamo provato ad addestrare un unico modello XGBoost utilizzando tutto il dataset, 
     senza dividere gli studenti in base alla categoria di laurea. Per trovare la configurazione migliore del modello abbiamo usato Optuna, 
@@ -126,18 +133,3 @@ Manuel + Gabriele:
     - Infine, sarà fatto anche un confronto con l'approccio precedente, in cui era stato addestrato un modello diverso per ogni categoria
     di laurea, per capire quale delle due soluzioni offre le prestazioni migliori.
 
-
-
-04.06.26 mattina:
-    Gabriele:
-        Git - project recovering: recovering overwritten parts + merge conflicts
-        Post-semester gpa Model: visualizzazione dei modelli divisi per major e di quello globale
-        Presentazione: feedback su slide
-        ragionamento con Anna su feature engineering da tentare
-        tentativi di feature engineering
-
-    Anna: 
-        creazione di nuove feature con il metodo di feature engineering 
-
-    Manuel: 
-        Prove di creare nuove feature ma i risultati sono stati misti
