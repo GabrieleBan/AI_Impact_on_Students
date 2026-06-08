@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-import lightgbm # Importato ma non usato direttamente se i pkl sono XGBoost
 
 # Configurazione pagina
 st.set_page_config(page_title="AI & Student Performance Analytics", layout="wide")
@@ -14,22 +13,11 @@ def load_models(path_model):
         model = joblib.load(path_model)
         return model
     except FileNotFoundError:
-        # Modelli fittizi di fallback se non trova i file
         return None
 
-# Caricamento dei file reali aggiornati
+# Caricamento dei file reali
 model_gpa = load_models("gpa_model.pkl")
 model_burnout = load_models("burnout_model.pkl")
-
-# Configurazione parametri LightGBM interni al VotingClassifier per ignorare shape mismatch minori
-if model_burnout is not None:
-    try:
-        if hasattr(model_burnout, "estimators_"):
-            for est in model_burnout.estimators_:
-                if 'LightGBM' in str(type(est)) or hasattr(est, "set_params"):
-                    est.set_params(predict_disable_shape_check=True)
-    except Exception:
-        pass
 
 # 2. INTERFACCIA GRAFICA (TITOLO)
 st.title("🎓 Impatto della GenAI sulle Performance degli Studenti")
@@ -58,62 +46,41 @@ with col3:
     policy = col3.selectbox("Policy Istituzionale AI", ["Allowed_With_Citation", "Strict_Ban", "Open_Use"])
     anxiety = col3.slider("Livello Ansia Esami (1-10)", 1, 10, 5)
 
-# Skill retention posizionata sotto la colonna 1
 with col1:
     retention = st.slider("Skill Retention Score", 0.0, 100.0, 70.0)
 
 
-# 4. PREPARAZIONE DEI DATI - TRASFORMAZIONE ONE-HOT ENCODING UNIFICATA (22 colonne ordinate)
-features_comuni = {
-    'Year_of_Study': year,
-    'Pre_Semester_GPA': pre_gpa,
-    'Weekly_GenAI_Hours': weekly_hours,
-    'Prompt_Engineering_Skill': prompt_skill,
-    'Tool_Diversity': tool_div,
-    'Paid_Subscription': paid_sub,
-    'Traditional_Study_Hours': study_hours,
-    'Perceived_AI_Dependency': ai_dep,
-    'Anxiety_Level_During_Exams': anxiety,
-    
-    # Inizializziamo a False i booleani del Caso d'Uso
-    'is_Copywriting/Drafting': False,
-    'is_Ideation': False,
-    'is_Summarizing_Reading': False,
-    'is_Debugging/Troubleshooting': False,
-    'is_Direct_Answer_Generation': False,
-    
-    # Inizializziamo a False le Policy istituzionali
-    'is_Allowed_With_Citation': False,
-    'is_Strict_Ban': False,
-    'is_Actively_Encouraged': False,
-    
-    # Inizializziamo a False i Major universitari
-    'major_is_Humanities': False,
-    'major_is_Medical': False,
-    'major_is_Business': False,
-    'major_is_STEM': False,
-    'major_is_Arts': False
+# 4. PREPARAZIONE DEI DATI ADATTATA AI DUE DIFFERENTI MODELLI
+
+# --- STRUTTURA A: DATI PER IL MODELLO GPA (22 colonne specifiche) ---
+features_gpa = {
+    'Year_of_Study': year, 'Pre_Semester_GPA': pre_gpa, 'Weekly_GenAI_Hours': weekly_hours,
+    'Prompt_Engineering_Skill': prompt_skill, 'Tool_Diversity': tool_div, 'Paid_Subscription': paid_sub,
+    'Traditional_Study_Hours': study_hours, 'Perceived_AI_Dependency': ai_dep, 'Anxiety_Level_During_Exams': anxiety,
+    'is_Copywriting/Drafting': False, 'is_Ideation': False, 'is_Summarizing_Reading': False,
+    'is_Debugging/Troubleshooting': False, 'is_Direct_Answer_Generation': False,
+    'is_Allowed_With_Citation': False, 'is_Strict_Ban': False, 'is_Actively_Encouraged': False,
+    'major_is_Humanities': False, 'major_is_Medical': False, 'major_is_Business': False,
+    'major_is_STEM': False, 'major_is_Arts': False
 }
 
-# Attiviamo il flag corretto in base all'input selezionato dall'utente
-if use_case == "Copywriting/Drafting": features_comuni['is_Copywriting/Drafting'] = True
-elif use_case == "Ideation": features_comuni['is_Ideation'] = True
-elif use_case == "Summarizing_Reading": features_comuni['is_Summarizing_Reading'] = True
-elif use_case == "Coding": features_comuni['is_Debugging/Troubleshooting'] = True
-elif use_case == "Research": features_comuni['is_Direct_Answer_Generation'] = True
+if use_case == "Copywriting/Drafting": features_gpa['is_Copywriting/Drafting'] = True
+elif use_case == "Ideation": features_gpa['is_Ideation'] = True
+elif use_case == "Summarizing_Reading": features_gpa['is_Summarizing_Reading'] = True
+elif use_case == "Coding": features_gpa['is_Debugging/Troubleshooting'] = True
+elif use_case == "Research": features_gpa['is_Direct_Answer_Generation'] = True
 
-if policy == "Allowed_With_Citation": features_comuni['is_Allowed_With_Citation'] = True
-elif policy == "Strict_Ban": features_comuni['is_Strict_Ban'] = True
-elif policy == "Open_Use": features_comuni['is_Actively_Encouraged'] = True
+if policy == "Allowed_With_Citation": features_gpa['is_Allowed_With_Citation'] = True
+elif policy == "Strict_Ban": features_gpa['is_Strict_Ban'] = True
+elif policy == "Open_Use": features_gpa['is_Actively_Encouraged'] = True
 
-if major == "Humanities": features_comuni['major_is_Humanities'] = True
-elif major == "Medical": features_comuni['major_is_Medical'] = True
-elif major == "Business": features_comuni['major_is_Business'] = True
-elif major == "STEM": features_comuni['major_is_STEM'] = True
-elif major == "Other": features_comuni['major_is_Arts'] = True
+if major == "Humanities": features_gpa['major_is_Humanities'] = True
+elif major == "Medical": features_gpa['major_is_Medical'] = True
+elif major == "Business": features_gpa['major_is_Business'] = True
+elif major == "STEM": features_gpa['major_is_STEM'] = True
+elif major == "Other": features_gpa['major_is_Arts'] = True
 
-# Ordine tassativo richiesto da XGBoost e LightGBM (22 colonne esatte)
-ordine_colonne_finale = [
+ordine_gpa = [
     'Year_of_Study', 'Pre_Semester_GPA', 'Weekly_GenAI_Hours', 'Prompt_Engineering_Skill', 
     'Tool_Diversity', 'Paid_Subscription', 'Traditional_Study_Hours', 'Perceived_AI_Dependency', 
     'Anxiety_Level_During_Exams', 'is_Copywriting/Drafting', 'is_Ideation', 'is_Summarizing_Reading', 
@@ -121,34 +88,87 @@ ordine_colonne_finale = [
     'is_Strict_Ban', 'is_Actively_Encouraged', 'major_is_Humanities', 'major_is_Medical', 
     'major_is_Business', 'major_is_STEM', 'major_is_Arts'
 ]
-
-# Creiamo l'unico vero DataFrame valido per entrambi i modelli
-dati_finali = pd.DataFrame([features_comuni])[ordine_colonne_finale]
-
-# Convertiamo in tipo categorico standard le due colonne rimaste testuali per evitare vecchi errori di formato
-dati_finali['Year_of_Study'] = dati_finali['Year_of_Study'].astype('category')
-dati_finali['Prompt_Engineering_Skill'] = dati_finali['Prompt_Engineering_Skill'].astype('category')
+dati_gpa = pd.DataFrame([features_gpa])[ordine_gpa]
+dati_gpa['Year_of_Study'] = dati_gpa['Year_of_Study'].astype('category')
+dati_gpa['Prompt_Engineering_Skill'] = dati_gpa['Prompt_Engineering_Skill'].astype('category')
 
 
-# Checkbox di Debug per l'interfaccia di Streamlit
-if st.checkbox("Mostra il DataFrame di input unificato inviato ai modelli (22 feature)"):
-    st.dataframe(dati_finali)
+# --- STRUTTURA B: DATI PER IL MODELLO BURNOUT (22 colonne estratte dal log di errore) ---
+# Eseguiamo prima la predizione del GPA per poter passare il valore 'Post_Semester_GPA' richiesto dal modello Burnout
+simulated_or_predicted_gpa = pre_gpa # Valore di fallback
+
+if model_gpa is not None:
+    try:
+        simulated_or_predicted_gpa = model_gpa.predict(dati_gpa)[0]
+    except Exception:
+        pass
+
+features_burnout = {
+    # Variabili numeriche/scalari standard
+    'Year_of_Study': ["Freshman", "Sophomore", "Junior", "Senior"].index(year), # Trasformato in numerico per stabilità
+    'Pre_Semester_GPA': float(pre_gpa),
+    'Weekly_GenAI_Hours': float(weekly_hours),
+    'Tool_Diversity': int(tool_div),
+    'Paid_Subscription': int(paid_sub),
+    'Traditional_Study_Hours': float(study_hours),
+    'Perceived_AI_Dependency': int(ai_dep),
+    'Anxiety_Level_During_Exams': int(anxiety),
+    'Post_Semester_GPA': float(simulated_or_predicted_gpa),
+    'Skill_Retention_Score': float(retention),
+
+    # One-Hot Encoding puro richiesto dall'errore
+    'Major_Category_Business': 1 if major == "Business" else 0,
+    'Major_Category_Humanities': 1 if major == "Humanities" else 0,
+    'Major_Category_Medical': 1 if major == "Medical" else 0,
+    'Major_Category_STEM': 1 if major == "STEM" else 0,
+    
+    'Primary_Use_Case_Debugging/Troubleshooting': 1 if use_case == "Coding" else 0,
+    'Primary_Use_Case_Direct_Answer_Generation': 1 if use_case == "Research" else 0,
+    'Primary_Use_Case_Ideation': 1 if use_case == "Ideation" else 0,
+    'Primary_Use_Case_Summarizing_Reading': 1 if use_case == "Summarizing_Reading" else 0,
+    
+    'Prompt_Engineering_Skill_Beginner': 1 if prompt_skill == "Beginner" else 0,
+    'Prompt_Engineering_Skill_Intermediate': 1 if prompt_skill == "Intermediate" else 0,
+    
+    'Institutional_Policy_Allowed_With_Citation': 1 if policy == "Allowed_With_Citation" else 0,
+    'Institutional_Policy_Strict_Ban': 1 if policy == "Strict_Ban" else 0
+}
+
+# Ordine esatto richiesto dal tracciato di addestramento del modello Burnout
+ordine_burnout = [
+    'Major_Category_Business', 'Major_Category_Humanities', 'Major_Category_Medical', 'Major_Category_STEM',
+    'Primary_Use_Case_Debugging/Troubleshooting', 'Primary_Use_Case_Direct_Answer_Generation', 
+    'Primary_Use_Case_Ideation', 'Primary_Use_Case_Summarizing_Reading', 
+    'Prompt_Engineering_Skill_Beginner', 'Prompt_Engineering_Skill_Intermediate', 
+    'Institutional_Policy_Allowed_With_Citation', 'Institutional_Policy_Strict_Ban', 
+    'Year_of_Study', 'Pre_Semester_GPA', 'Weekly_GenAI_Hours', 'Tool_Diversity', 
+    'Paid_Subscription', 'Traditional_Study_Hours', 'Perceived_AI_Dependency', 
+    'Anxiety_Level_During_Exams', 'Post_Semester_GPA', 'Skill_Retention_Score'
+]
+
+dati_burnout = pd.DataFrame([features_burnout])[ordine_burnout]
+
+
+# Checkbox di Debug per visualizzare l'allineamento perfetto
+if st.checkbox("Mostra DataFrame di Input inviati ai modelli"):
+    st.markdown("**Tracciato Modello GPA:**")
+    st.dataframe(dati_gpa)
+    st.markdown("**Tracciato Modello Burnout (Allineato all'errore):**")
+    st.dataframe(dati_burnout)
 
 
 # 5. PULSANTE DI CALCOLO UNICO E OUTPUT
-st.write("") # Spazio vuoto
+st.write("") 
 if st.button("🚀 Calcola Predizioni", type="primary", use_container_width=True):
     
     st.markdown("### 📊 Risultati dell'Analisi")
-    
-    # Creiamo due colonne per mostrare i risultati affiancati in modo elegante
     res_col1, res_col2 = st.columns(2)
     
     # --- COLONNA 1: PREDIZIONE GPA ---
     with res_col1:
         st.markdown("#### 🎯 Performance Accademica")
         if model_gpa is not None:
-            pred_gpa = model_gpa.predict(dati_finali)[0] 
+            pred_gpa = model_gpa.predict(dati_gpa)[0] 
             st.metric(label="Post_Semester_GPA Predetto", value=f"{pred_gpa:.3f}")
         else:
             st.warning("⚠️ File 'gpa_model.pkl' non trovato. Mostro simulazione:")
@@ -159,10 +179,12 @@ if st.button("🚀 Calcola Predizioni", type="primary", use_container_width=True
     with res_col2:
         st.markdown("#### 🧠 Benessere dello Studente")
         if model_burnout is not None:
-            # Passiamo lo stesso DataFrame a 22 colonne a LightGBM/VotingClassifier
-            pred_burnout = model_burnout.predict(dati_finali)[0]
+            # Se la predizione del GPA reale è avvenuta con successo, aggiorna il record dinamico per il Burnout
+            if model_gpa is not None:
+                dati_burnout['Post_Semester_GPA'] = float(pred_gpa)
+                
+            pred_burnout = model_burnout.predict(dati_burnout)[0]
             
-            # Colora l'output in base al risultato del modello reale
             if str(pred_burnout).lower() == "high":
                 st.error(f"🔥 Livello Rischio Burnout: {pred_burnout}")
             elif str(pred_burnout).lower() == "medium":
