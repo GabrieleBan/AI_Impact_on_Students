@@ -77,7 +77,7 @@ Adriano:
     sicuro della propria preparazione e, di conseguenza, affronta la prova con totale serenità e pochissima ansia.
         CHI USA TANTA IA POI SI TROVA MAGGIORMENTE IN DIFFICOLTA' ALL'ESAME 
 
---------------------------------------------------
+-----------------------------------------------------------------------
 04.06.26
 
 Adriano:
@@ -127,8 +127,8 @@ Manuel + Gabriele:
     di laurea, per capire quale delle due soluzioni offre le prestazioni migliori.
 
 
-
-04.06.26 mattina:
+-----------------------------------------------------------------------
+04.06.26 
     Gabriele:
         Git - project recovering: recovering overwritten parts + merge conflicts
         Post-semester gpa Model: visualizzazione dei modelli divisi per major e di quello globale
@@ -142,7 +142,7 @@ Manuel + Gabriele:
     Manuel: 
         Prove di creare nuove feature ma i risultati sono stati misti
 
-
+-----------------------------------------------------------------------
 08.06.26
 
     Manuel:
@@ -156,3 +156,20 @@ Manuel + Gabriele:
 
     Adriano:
         interfaccia con l'utente
+
+-----------------------------------------------------------------------
+09.06.26
+
+    Gabriele:
+        modifiche all'interfaccia grafica
+        processamento input dell'utente
+        ristrutturazione della struttura del progetto
+
+    Anna:
+        adattamento del modello all'interfaccia grafica per la gestione delle colonne da parte dell'interfaccia
+        miglioramento delle slide
+
+    Manuel:
+        lavoro sulla presentazione
+
+
