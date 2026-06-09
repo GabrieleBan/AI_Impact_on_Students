@@ -1,6 +1,9 @@
+from app_utils.from_categorical_to_value import get_Anxiety_by_Year, get_Stress_Index, get_Study_Imbalance, get_Study_to_AI_Ratio, get_assegna_fascia_gpa, get_year_of_study_map
+
+
 def process_user_data_for_gpa_model(major, year, pre_gpa, policy, study_hours, weekly_ai_hours, use_case, paid_sub, anxiety, ai_dep, prompt_skill, tool_div):
     features_comuni = {
-    'Year_of_Study': year,
+    'Year_of_Study': get_year_of_study_map()[year],
     'Pre_Semester_GPA': pre_gpa,
     'Weekly_GenAI_Hours': weekly_ai_hours,
     'Prompt_Engineering_Skill': prompt_skill,
@@ -65,9 +68,10 @@ def process_user_data_for_gpa_model(major, year, pre_gpa, policy, study_hours, w
 
 
 def process_user_data_for_burnout_model(major, year, pre_gpa, policy, study_hours, weekly_ai_hours, use_case, paid_sub, anxiety, ai_dep, prompt_skill, tool_div):
+    year_num=get_year_of_study_map()[year]
     features_comuni = {
     'Post_Semester_GPA':None,
-    'Year_of_Study': year,
+    'Year_of_Study': year_num,
     'Pre_Semester_GPA': pre_gpa,
     'Weekly_GenAI_Hours': weekly_ai_hours,
     
@@ -79,10 +83,11 @@ def process_user_data_for_burnout_model(major, year, pre_gpa, policy, study_hour
 
     "Prompt_Engineering_Skill_Beginner":False,
     "Prompt_Engineering_Skill_Intermediate":False,
+    'Prompt_Engineering_Skill_Advanced': False,
    
 
     # booleani caso d'uso inizializzati a false
-    # 'Primary_Use_Case_Copywriting/Drafting': False,
+    'Primary_Use_Case_Copywriting/Drafting': False,
     'Primary_Use_Case_Ideation': False,
     'Primary_Use_Case_Summarizing_Reading': False,
     'Primary_Use_Case_Debugging/Troubleshooting': False,
@@ -90,13 +95,19 @@ def process_user_data_for_burnout_model(major, year, pre_gpa, policy, study_hour
     # inizializzazione policy istituzionali
     'Institutional_Policy_Strict_Ban': False,
     'Institutional_Policy_Allowed_With_Citation': False,
+    'Institutional_Policy_Actively_Encouraged': False,
     # inizializzazione major bool
     'Major_Category_Business': False,
     'Major_Category_Medical': False,
-    # 'Major_Category_Arts': False,
     'Major_Category_STEM': False,
-    'Major_Category_Arts': False
-}
+    'Major_Category_Arts': False,
+    'Major_Category_Humanities': False,
+    'Study_to_AI_Ratio':get_Study_to_AI_Ratio(study_hours,weekly_ai_hours ),
+    'Stress_Index':get_Stress_Index(weekly_ai_hours,anxiety,pre_gpa, paid_sub),
+    'Anxiety_by_Year':get_Anxiety_by_Year(anxiety,year_num),
+    'Study_Imbalance':get_Study_Imbalance(study_hours, weekly_ai_hours),
+    'Student_Performance_Tier':get_assegna_fascia_gpa(pre_gpa),
+    }
 
 # Attiviamo il flag corretto in base all'input selezionato dall'utente
     if prompt_skill ==0:
@@ -121,7 +132,7 @@ def process_user_data_for_burnout_model(major, year, pre_gpa, policy, study_hour
         case "Strict_Ban":
             features_comuni['Institutional_Policy_Strict_Ban'] = True
         case "Actively_Encouraged":
-            features_comuni['is_Actively_Encouraged'] = True
+            features_comuni['Institutional_Policy_Actively_Encouraged'] = True
 
     match major:
         case "Humanities":
@@ -136,4 +147,8 @@ def process_user_data_for_burnout_model(major, year, pre_gpa, policy, study_hour
             features_comuni['Major_Category_Arts'] = True
     return features_comuni
 
+def reorder_colums_for_burnout(df):
+    expected_order=['Major_Category_Arts', 'Major_Category_Business', 'Major_Category_Humanities', 'Major_Category_Medical', 'Major_Category_STEM', 'Primary_Use_Case_Copywriting/Drafting', 'Primary_Use_Case_Debugging/Troubleshooting', 'Primary_Use_Case_Direct_Answer_Generation', 'Primary_Use_Case_Ideation', 'Primary_Use_Case_Summarizing_Reading', 'Prompt_Engineering_Skill_Advanced', 'Prompt_Engineering_Skill_Beginner', 'Prompt_Engineering_Skill_Intermediate', 'Institutional_Policy_Actively_Encouraged', 'Institutional_Policy_Allowed_With_Citation', 'Institutional_Policy_Strict_Ban', 'Year_of_Study', 'Pre_Semester_GPA', 'Weekly_GenAI_Hours', 'Tool_Diversity', 'Paid_Subscription', 'Traditional_Study_Hours', 'Perceived_AI_Dependency', 'Anxiety_Level_During_Exams', 'Post_Semester_GPA', 'Study_to_AI_Ratio', 'Stress_Index', 'Anxiety_by_Year', 'Study_Imbalance', 'Student_Performance_Tier'] 
+    df=df[expected_order]
+    return df
 

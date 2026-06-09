@@ -2,118 +2,124 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-
+from app_utils.user_input_processing import process_user_data_for_burnout_model, process_user_data_for_gpa_model, reorder_colums_for_burnout
+import lightgbm 
 # Configurazione pagina
 st.set_page_config(page_title="AI & Student Performance Analytics", layout="wide")
 
-# 1. FUNZIONI PER IL CARICAMENTO DEI MODELLI
+# Caricamento modelli con cache
 @st.cache_resource
-def load_models():
-    # Sostituisci i nomi dei file con i tuoi modelli reali salvati
+def load_models(path_model):
     try:
-        model_gpa = joblib.load("modello_gpa.pkl")
-        model_burnout = joblib.load("modello_burnout.pkl")
-        return model_gpa, model_burnout
+        model = joblib.load(path_model)
+        return model
     except FileNotFoundError:
-        # Modelli fittizi di fallback se non trova i file (giusto per non far crashare l'app al primo avvio)
-        return None, None
+        return None
 
-model_gpa, model_burnout = load_models()
+# Caricamento modelli
+model_gpa = load_models("gpa_model.pkl")
+model_burnout = load_models("burnout_model.pkl")
 
-# 2. INTERFACCIA GRAFICA (SIDEBAR & TITOLO)
-st.title("🎓 Impatto della GenAI sulle Performance degli Studenti")
-st.markdown("Inserisci i dati dello studente per calcolare la predizione del **GPA** o del **Rischio di Burnout**.")
+# Configurazione parametri LightGBM interni al VotingClassifier per ignorare shape mismatch minori
+if model_burnout is not None:
+    try:
+        if hasattr(model_burnout, "estimators_"):
+            for est in model_burnout.estimators_:
+                if 'LightGBM' in str(type(est)) or hasattr(est, "set_params"):
+                    est.set_params(predict_disable_shape_check=True)
+    except Exception:
+        pass
 
-st.sidebar.header("Impostazioni Predizione")
-scelta_predizione = st.sidebar.radio(
-    "Cosa vuoi predire?",
-    ["Post_Semester_GPA (Regressione)", "Burnout_Risk_Level (Classificazione)"]
-)
+# INTERFACCIA GRAFICA (TITOLO)
+st.title("🎓 Impatto della AI su gli Studenti")
+st.markdown("Inserisci i dati dello studente per calcolare il **GPA** atteso e del **Rischio di Burnout**.")
 
-
-
-# 3. INPUT DELL'UTENTE (Organizzato in colonne)
+# INPUT DELL'UTENTE (Organizzato in colonne)
 st.subheader("📝 Dati dello Studente")
 
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    major = col1.selectbox("Facoltà (Major_Category)", ["Humanities", "Medical", "Business", "STEM", "Other"])
-    year = col1.selectbox("Anno di Studio", ["Freshman", "Sophomore", "Junior", "Senior"])
-    pre_gpa = col1.number_input("Pre_Semester_GPA", min_value=0.0, max_value=4.0, value=3.0, step=0.1)
-    weekly_hours = col1.number_input("Ore settimanali uso GenAI", min_value=0.0, max_value=50.0, value=10.0)
+    major = col1.selectbox("Facoltà (Major_Category)", ["Humanities", "Medical", "Business", "STEM", "Arts"])
+    year = col1.selectbox("Anno di Studio", ["Freshman", "Sophomore", "Junior", "Senior","Graduate"])
+    pre_gpa = col1.number_input("GPA ultimo semestre", min_value=0.0, max_value=4.0, value=3.0, step=0.25)
+    policy = col3.selectbox("Policy Istituzionale AI", ["Allowed_With_Citation", "Strict_Ban", "Actively_Encouraged"])
+    
 
 with col2:
+    study_hours = col3.number_input("Ore Studio Tradizionale/Settimana", min_value=0.0, max_value=100.0, value=15.0,step=1.0)
+    weekly_ai_hours = col1.number_input("Ore settimanali uso GenAI", min_value=0.0, max_value=50.0, value=10.0, step=1.0)
     use_case = col2.selectbox("Uso Principale AI", ["Copywriting/Drafting", "Ideation", "Summarizing_Reading", "Coding", "Research"])
-    prompt_skill = col2.selectbox("Skill Prompt Engineering", ["Beginner", "Intermediate", "Advanced"])
-    tool_div = col2.slider("Diversità Strumenti Usati (Tool Diversity)", 1, 10, 3)
     paid_sub = col2.checkbox("Abbonamento GenAI a pagamento?")
 
 with col3:
-    study_hours = col3.number_input("Ore Studio Tradizionale/Settimana", min_value=0.0, max_value=100.0, value=15.0)
-    ai_dep = col3.slider("Dipendenza percepita da AI (1-5)", 1, 5, 3)
-    policy = col3.selectbox("Policy Istituzionale AI", ["Allowed_With_Citation", "Strict_Ban", "Open_Use"])
     anxiety = col3.slider("Livello Ansia Esami (1-10)", 1, 10, 5)
-
-# Feature extra se necessaria per il modello burnout
-with col1:
-    if "Burnout" in scelta_predizione:
-        retention = st.slider("Skill Retention Score", 0.0, 100.0, 70.0)
-    else:
-        retention = 70.0 # Valore di default se non usato
-
-
-# 4. PREPARAZIONE DEI DATI PER SCIKIT-LEARN
-# Nota: Se nel tuo modello hai usato la codifica One-Hot (get_dummies) o LabelEncoder per il testo,
-# devi replicare lo stesso identico formato qui prima di passarlo al `.predict()`.
-
-dati_utente = pd.DataFrame([{
-    'Major_Category': major,
-    'Year_of_Study': year,
-    'Pre_Semester_GPA': pre_gpa,
-    'Weekly_GenAI_Hours': weekly_hours,
-    'Primary_Use_Case': use_case,
-    'Prompt_Engineering_Skill': prompt_skill,
-    'Tool_Diversity': tool_div,
-    'Paid_Subscription': paid_sub,
-    'Traditional_Study_Hours': study_hours,
-    'Perceived_AI_Dependency': ai_dep,
-    'Institutional_Policy': policy,
-    'Anxiety_Level_During_Exams': anxiety,
-    'Skill_Retention_Score': retention
-}])
-
-# Mostra i dati inseriti in formato tabella (opzionale, utile per debug)
-if st.checkbox("Mostra DataFrame di Input inviato al modello"):
-    st.dataframe(dati_utente)
+    ai_dep = col3.slider("Dipendenza percepita da AI (1-5)", 1, 10, 3)
+    prompt_skill = col2.selectbox("Skill Prompt Engineering", ["Beginner", "Intermediate", "Advanced"])
+    tool_div = col2.slider("Numero Strumenti Usati", 1, 10, 3)
 
 
 
-# 5. PULSANTE DI CALCOLO E OUTPUT
+# inizializzazione retrieve dati da UI
+
+
+features_comuni = process_user_data_for_gpa_model(major, year, pre_gpa, policy, study_hours, weekly_ai_hours, use_case, paid_sub, anxiety, ai_dep, prompt_skill, tool_div)
+
+
+
+gpa_data = pd.DataFrame([features_comuni])
+
+# Convertiamo in tipo categorico standard le due colonne rimaste testuali per evitare vecchi errori di formato
+from app_utils.from_categorical_to_value import get_prompt_level_map
+gpa_data['Prompt_Engineering_Skill'] = gpa_data['Prompt_Engineering_Skill'].map(get_prompt_level_map())
+
+
+burnout_data=process_user_data_for_burnout_model(major, year, pre_gpa, policy, study_hours, weekly_ai_hours, use_case, paid_sub, anxiety, ai_dep, prompt_skill, tool_div)
+burnout_data=pd.DataFrame([burnout_data])
+
+# Checkbox di Debug per l'interfaccia di Streamlit
+# if st.checkbox("Mostra il DataFrame di input unificato inviato ai modelli (22 feature)"):
+#         st.dataframe(burnout_data)
+# pulsante calcolo gpa
 st.write("") # Spazio vuoto
-if st.button("🚀 Calcola Predizione", type="primary"):
+if st.button("🚀 Calcola Predizioni", type="primary", use_container_width=True):
     
-    # ESEMPIO DI PRE-PROCESSING (Adatta in base a come hai allenato il modello)
-    # Se il tuo modello accetta solo numeri, dovrai mappare le stringhe in numeri (es. map o OneHotEncoder)
-    # Per ora simuliamo il passaggio diretto o mostriamo un avviso se il modello manca:
+    st.markdown("### 📊 Risultati dell'Analisi")
     
-    if "GPA" in scelta_predizione:
+    # due colonne oer risultati affiancati 
+    res_col1, res_col2 = st.columns(2)
+    
+    # PREDIZIONE GPA 
+    
+    with res_col1:
+        st.markdown("#### 🎯 Performance Accademica")
         if model_gpa is not None:
-            # Sostituisci questa riga con il pre-processing corretto se necessario
-            pred = model_gpa.predict(dati_utente) 
-            st.metric(label="🎯 Post_Semester_GPA Predetto", value=f"{pred[0]:.3f}")
+            pred_gpa = model_gpa.predict(gpa_data)[0] 
+            st.metric(label="Post_Semester_GPA Predetto", value=f"{pred_gpa:.3f}")
         else:
-            st.warning("⚠️ Modello 'modello_gpa.pkl' non trovato. Ecco una predizione simulata:")
-            simulated_gpa = max(0.0, min(4.0, pre_gpa - (weekly_hours * 0.01) + (study_hours * 0.02)))
-            st.metric(label="🎯 Post_Semester_GPA (Simulato)", value=f"{simulated_gpa:.3f}")
-            
-    else: # Predizione Burnout
+            st.warning("⚠️ File 'gpa_model.pkl' non trovato. Mostro simulazione:")
+            pred_gpa = max(0.0, min(4.0, pre_gpa - (weekly_ai_hours * 0.01) + (study_hours * 0.02)))
+            st.metric(label="Post_Semester_GPA (Simulato)", value=f"{pred_gpa:.3f}")
+
+    burnout_data["Post_Semester_GPA"]=float(pred_gpa)
+
+    
+    with res_col2:
+        st.markdown("#### 🧠 Rischio burnout studente")
         if model_burnout is not None:
-            pred = model_burnout.predict(dati_utente)
-            st.subheader(f"🔥 Livello Rischio Burnout: {pred[0]}")
+            # Passiamo lo stesso DataFrame a 22 colonne a LightGBM/VotingClassifier
+            burnout_data=reorder_colums_for_burnout(burnout_data)
+            pred_burnout = model_burnout.predict_proba(burnout_data)[0]
+
+
+            st.error(f"🔥 Alto: {pred_burnout[2]*100:.2f}%")
+            st.warning(f"⚠️ Medio: {pred_burnout[1]*100:.2f}%")
+            st.success(f"✅ Basso: {pred_burnout[0]*100:.2f}%")
+
+
         else:
-            st.warning("⚠️ Modello 'modello_burnout.pkl' non trovato. Ecco una predizione simulata:")
-            rischio = "High" if (weekly_hours > 20 and anxiety > 7) else "Medium" if anxiety > 4 else "Low"
+            st.warning("⚠️ File 'burnout_model.pkl' non trovato. Mostro simulazione:")
+            rischio = "High" if (weekly_ai_hours > 20 and anxiety > 7) else "Medium" if anxiety > 4 else "Low"
             
             if rischio == "High":
                 st.error(f"🔥 Livello Rischio Burnout (Simulato): {rischio}")
