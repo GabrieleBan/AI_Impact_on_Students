@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-from app_utils.user_input_processing import process_user_data_for_burnout_model, process_user_data_for_gpa_model
+from app_utils.user_input_processing import process_user_data_for_burnout_model, process_user_data_for_gpa_model, reorder_colums_for_burnout
 import lightgbm 
 # Configurazione pagina
 st.set_page_config(page_title="AI & Student Performance Analytics", layout="wide")
@@ -75,11 +75,12 @@ gpa_data['Year_of_Study'] = gpa_data['Year_of_Study'].map(get_year_of_study_map(
 gpa_data['Prompt_Engineering_Skill'] = gpa_data['Prompt_Engineering_Skill'].map(get_prompt_level_map())
 
 
-# Checkbox di Debug per l'interfaccia di Streamlit
-# if st.checkbox("Mostra il DataFrame di input unificato inviato ai modelli (22 feature)"):
-#     st.dataframe(dati_finali)
+burnout_data=process_user_data_for_burnout_model(major, year, pre_gpa, policy, study_hours, weekly_ai_hours, use_case, paid_sub, anxiety, ai_dep, prompt_skill, tool_div)
+burnout_data=pd.DataFrame([burnout_data])
+burnout_data['Year_of_Study'] = burnout_data['Year_of_Study'].map(get_year_of_study_map())
 
-
+if st.checkbox("Mostra il DataFrame di input unificato inviato ai modelli (22 feature)"):
+        st.dataframe(burnout_data)
 # pulsante calcolo gpa
 st.write("") # Spazio vuoto
 if st.button("🚀 Calcola Predizioni", type="primary", use_container_width=True):
@@ -101,24 +102,22 @@ if st.button("🚀 Calcola Predizioni", type="primary", use_container_width=True
             pred_gpa = max(0.0, min(4.0, pre_gpa - (weekly_ai_hours * 0.01) + (study_hours * 0.02)))
             st.metric(label="Post_Semester_GPA (Simulato)", value=f"{pred_gpa:.3f}")
 
-    burnout_data=process_user_data_for_burnout_model(major, year, pre_gpa, policy, study_hours, weekly_ai_hours, use_case, paid_sub, anxiety, ai_dep, prompt_skill, tool_div)
-    burnout_data=pd.DataFrame([burnout_data])
     burnout_data["Post_Semester_GPA"]=float(pred_gpa)
-    burnout_data['Year_of_Study'] = burnout_data['Year_of_Study'].map(get_year_of_study_map())
+    # Checkbox di Debug per l'interfaccia di Streamlit
+    
     with res_col2:
-        st.markdown("#### 🧠 Benessere dello Studente")
+        st.markdown("#### 🧠 Rischio burnout studente")
         if model_burnout is not None:
             # Passiamo lo stesso DataFrame a 22 colonne a LightGBM/VotingClassifier
-      
-            pred_burnout = model_burnout.predict(burnout_data)[0]
-            
-            # Colora l'output in base al risultato del modello reale
-            if str(pred_burnout).lower() == "high":
-                st.error(f"🔥 Livello Rischio Burnout: {pred_burnout}")
-            elif str(pred_burnout).lower() == "medium":
-                st.warning(f"⚠️ Livello Rischio Burnout: {pred_burnout}")
-            else:
-                st.success(f"✅ Livello Rischio Burnout: {pred_burnout}")
+            burnout_data=reorder_colums_for_burnout(burnout_data)
+            pred_burnout = model_burnout.predict_proba(burnout_data)[0]
+
+
+            st.error(f"🔥 Alto: {pred_burnout[2]*100:.2f}%")
+            st.warning(f"⚠️ Medio: {pred_burnout[1]*100:.2f}")
+            st.success(f"✅ Basso: {pred_burnout[0]*100:.2f}")
+
+
         else:
             st.warning("⚠️ File 'burnout_model.pkl' non trovato. Mostro simulazione:")
             rischio = "High" if (weekly_ai_hours > 20 and anxiety > 7) else "Medium" if anxiety > 4 else "Low"
@@ -129,28 +128,3 @@ if st.button("🚀 Calcola Predizioni", type="primary", use_container_width=True
                 st.warning(f"⚠️ Livello Rischio Burnout (Simulato): {rischio}")
             else:
                 st.success(f"✅ Livello Rischio Burnout (Simulato): {rischio}")
-
-    # PREDIZIONE BURNOUT --- WIP
-    # with res_col2:
-    #     st.markdown("#### 🧠 Benessere dello Studente")
-    #     if model_burnout is not None:
-    #         # Passiamo lo stesso DataFrame a 22 colonne a LightGBM/VotingClassifier
-    #         pred_burnout = model_burnout.predict(dati_finali)[0]
-            
-    #         # Colora l'output in base al risultato del modello reale
-    #         if str(pred_burnout).lower() == "high":
-    #             st.error(f"🔥 Livello Rischio Burnout: {pred_burnout}")
-    #         elif str(pred_burnout).lower() == "medium":
-    #             st.warning(f"⚠️ Livello Rischio Burnout: {pred_burnout}")
-    #         else:
-    #             st.success(f"✅ Livello Rischio Burnout: {pred_burnout}")
-    #     else:
-    #         st.warning("⚠️ File 'burnout_model.pkl' non trovato. Mostro simulazione:")
-    #         rischio = "High" if (weekly_ai_hours > 20 and anxiety > 7) else "Medium" if anxiety > 4 else "Low"
-            
-    #         if rischio == "High":
-    #             st.error(f"🔥 Livello Rischio Burnout (Simulato): {rischio}")
-    #         elif rischio == "Medium":
-    #             st.warning(f"⚠️ Livello Rischio Burnout (Simulato): {rischio}")
-    #         else:
-    #             st.success(f"✅ Livello Rischio Burnout (Simulato): {rischio}")

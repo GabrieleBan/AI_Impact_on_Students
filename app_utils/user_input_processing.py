@@ -79,10 +79,11 @@ def process_user_data_for_burnout_model(major, year, pre_gpa, policy, study_hour
 
     "Prompt_Engineering_Skill_Beginner":False,
     "Prompt_Engineering_Skill_Intermediate":False,
+    'Prompt_Engineering_Skill_Advanced': False,
    
 
     # booleani caso d'uso inizializzati a false
-    # 'Primary_Use_Case_Copywriting/Drafting': False,
+    'Primary_Use_Case_Copywriting/Drafting': False,
     'Primary_Use_Case_Ideation': False,
     'Primary_Use_Case_Summarizing_Reading': False,
     'Primary_Use_Case_Debugging/Troubleshooting': False,
@@ -90,13 +91,19 @@ def process_user_data_for_burnout_model(major, year, pre_gpa, policy, study_hour
     # inizializzazione policy istituzionali
     'Institutional_Policy_Strict_Ban': False,
     'Institutional_Policy_Allowed_With_Citation': False,
+    'Institutional_Policy_Actively_Encouraged': False,
     # inizializzazione major bool
     'Major_Category_Business': False,
     'Major_Category_Medical': False,
-    # 'Major_Category_Arts': False,
     'Major_Category_STEM': False,
-    'Major_Category_Arts': False
-}
+    'Major_Category_Arts': False,
+    'Major_Category_Humanities': False,
+    'Study_to_AI_Ratio':0,
+    'Stress_Index':0,
+    'Anxiety_by_Year':0,
+    'Study_Imbalance':0,
+    'Student_Performance_Tier':0,
+    }
 
 # Attiviamo il flag corretto in base all'input selezionato dall'utente
     if prompt_skill ==0:
@@ -121,7 +128,7 @@ def process_user_data_for_burnout_model(major, year, pre_gpa, policy, study_hour
         case "Strict_Ban":
             features_comuni['Institutional_Policy_Strict_Ban'] = True
         case "Actively_Encouraged":
-            features_comuni['is_Actively_Encouraged'] = True
+            features_comuni['Institutional_Policy_Actively_Encouraged'] = True
 
     match major:
         case "Humanities":
@@ -136,4 +143,8 @@ def process_user_data_for_burnout_model(major, year, pre_gpa, policy, study_hour
             features_comuni['Major_Category_Arts'] = True
     return features_comuni
 
+def reorder_colums_for_burnout(df):
+    expected_order=['Major_Category_Arts', 'Major_Category_Business', 'Major_Category_Humanities', 'Major_Category_Medical', 'Major_Category_STEM', 'Primary_Use_Case_Copywriting/Drafting', 'Primary_Use_Case_Debugging/Troubleshooting', 'Primary_Use_Case_Direct_Answer_Generation', 'Primary_Use_Case_Ideation', 'Primary_Use_Case_Summarizing_Reading', 'Prompt_Engineering_Skill_Advanced', 'Prompt_Engineering_Skill_Beginner', 'Prompt_Engineering_Skill_Intermediate', 'Institutional_Policy_Actively_Encouraged', 'Institutional_Policy_Allowed_With_Citation', 'Institutional_Policy_Strict_Ban', 'Year_of_Study', 'Pre_Semester_GPA', 'Weekly_GenAI_Hours', 'Tool_Diversity', 'Paid_Subscription', 'Traditional_Study_Hours', 'Perceived_AI_Dependency', 'Anxiety_Level_During_Exams', 'Post_Semester_GPA', 'Study_to_AI_Ratio', 'Stress_Index', 'Anxiety_by_Year', 'Study_Imbalance', 'Student_Performance_Tier'] 
+    df=df[expected_order]
+    return df
 
