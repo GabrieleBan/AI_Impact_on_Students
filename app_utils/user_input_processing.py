@@ -1,4 +1,4 @@
-from from_categorical_to_value import get_Anxiety_by_Year, get_Stress_Index, get_Study_Imbalance, get_Study_to_AI_Ratio, get_assegna_fascia_gpa, get_year_of_study_map
+from app_utils.from_categorical_to_value import get_Anxiety_by_Year, get_Stress_Index, get_Study_Imbalance, get_Study_to_AI_Ratio, get_assegna_fascia_gpa, get_year_of_study_map
 
 
 def process_user_data_for_gpa_model(major, year, pre_gpa, policy, study_hours, weekly_ai_hours, use_case, paid_sub, anxiety, ai_dep, prompt_skill, tool_div):

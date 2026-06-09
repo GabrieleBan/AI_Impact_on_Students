@@ -70,7 +70,7 @@ features_comuni = process_user_data_for_gpa_model(major, year, pre_gpa, policy, 
 gpa_data = pd.DataFrame([features_comuni])
 
 # Convertiamo in tipo categorico standard le due colonne rimaste testuali per evitare vecchi errori di formato
-from from_categorical_to_value import get_prompt_level_map
+from app_utils.from_categorical_to_value import get_prompt_level_map
 gpa_data['Prompt_Engineering_Skill'] = gpa_data['Prompt_Engineering_Skill'].map(get_prompt_level_map())
 
 
