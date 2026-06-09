@@ -31,7 +31,7 @@ if model_burnout is not None:
         pass
 
 # INTERFACCIA GRAFICA (TITOLO)
-st.title("🎓 Impatto della GenAI sulle Performance degli Studenti")
+st.title("🎓 Impatto della AI su gli Studenti")
 st.markdown("Inserisci i dati dello studente per calcolare il **GPA** atteso e del **Rischio di Burnout**.")
 
 # INPUT DELL'UTENTE (Organizzato in colonne)
