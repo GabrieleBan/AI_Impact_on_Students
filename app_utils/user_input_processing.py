@@ -1,6 +1,9 @@
+from from_categorical_to_value import get_Anxiety_by_Year, get_Stress_Index, get_Study_Imbalance, get_Study_to_AI_Ratio, get_assegna_fascia_gpa, get_year_of_study_map
+
+
 def process_user_data_for_gpa_model(major, year, pre_gpa, policy, study_hours, weekly_ai_hours, use_case, paid_sub, anxiety, ai_dep, prompt_skill, tool_div):
     features_comuni = {
-    'Year_of_Study': year,
+    'Year_of_Study': get_year_of_study_map()[year],
     'Pre_Semester_GPA': pre_gpa,
     'Weekly_GenAI_Hours': weekly_ai_hours,
     'Prompt_Engineering_Skill': prompt_skill,
@@ -65,9 +68,10 @@ def process_user_data_for_gpa_model(major, year, pre_gpa, policy, study_hours, w
 
 
 def process_user_data_for_burnout_model(major, year, pre_gpa, policy, study_hours, weekly_ai_hours, use_case, paid_sub, anxiety, ai_dep, prompt_skill, tool_div):
+    year_num=get_year_of_study_map()[year]
     features_comuni = {
     'Post_Semester_GPA':None,
-    'Year_of_Study': year,
+    'Year_of_Study': year_num,
     'Pre_Semester_GPA': pre_gpa,
     'Weekly_GenAI_Hours': weekly_ai_hours,
     
@@ -98,11 +102,11 @@ def process_user_data_for_burnout_model(major, year, pre_gpa, policy, study_hour
     'Major_Category_STEM': False,
     'Major_Category_Arts': False,
     'Major_Category_Humanities': False,
-    'Study_to_AI_Ratio':0,
-    'Stress_Index':0,
-    'Anxiety_by_Year':0,
-    'Study_Imbalance':0,
-    'Student_Performance_Tier':0,
+    'Study_to_AI_Ratio':get_Study_to_AI_Ratio(study_hours,weekly_ai_hours ),
+    'Stress_Index':get_Stress_Index(weekly_ai_hours,anxiety,pre_gpa, paid_sub),
+    'Anxiety_by_Year':get_Anxiety_by_Year(anxiety,year_num),
+    'Study_Imbalance':get_Study_Imbalance(study_hours, weekly_ai_hours),
+    'Student_Performance_Tier':get_assegna_fascia_gpa(pre_gpa),
     }
 
 # Attiviamo il flag corretto in base all'input selezionato dall'utente

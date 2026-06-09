@@ -70,14 +70,13 @@ features_comuni = process_user_data_for_gpa_model(major, year, pre_gpa, policy, 
 gpa_data = pd.DataFrame([features_comuni])
 
 # Convertiamo in tipo categorico standard le due colonne rimaste testuali per evitare vecchi errori di formato
-from from_categorical_to_value import get_year_of_study_map,get_prompt_level_map
-gpa_data['Year_of_Study'] = gpa_data['Year_of_Study'].map(get_year_of_study_map())
+from from_categorical_to_value import get_prompt_level_map
 gpa_data['Prompt_Engineering_Skill'] = gpa_data['Prompt_Engineering_Skill'].map(get_prompt_level_map())
 
 
 burnout_data=process_user_data_for_burnout_model(major, year, pre_gpa, policy, study_hours, weekly_ai_hours, use_case, paid_sub, anxiety, ai_dep, prompt_skill, tool_div)
 burnout_data=pd.DataFrame([burnout_data])
-burnout_data['Year_of_Study'] = burnout_data['Year_of_Study'].map(get_year_of_study_map())
+
 
 if st.checkbox("Mostra il DataFrame di input unificato inviato ai modelli (22 feature)"):
         st.dataframe(burnout_data)
@@ -114,8 +113,8 @@ if st.button("🚀 Calcola Predizioni", type="primary", use_container_width=True
 
 
             st.error(f"🔥 Alto: {pred_burnout[2]*100:.2f}%")
-            st.warning(f"⚠️ Medio: {pred_burnout[1]*100:.2f}")
-            st.success(f"✅ Basso: {pred_burnout[0]*100:.2f}")
+            st.warning(f"⚠️ Medio: {pred_burnout[1]*100:.2f}%")
+            st.success(f"✅ Basso: {pred_burnout[0]*100:.2f}%")
 
 
         else:
